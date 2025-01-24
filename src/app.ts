@@ -24,7 +24,7 @@ console.log(styles);
 const css = new CSSStyleSheet();
 css.replaceSync(styles);
 App.styles = css;
-// document.adoptedStyleSheets.push(css);
+// document.adoptedStyleSheets.push(css); // Uncomment to fix the issue
 
 /*****************
  * Composing app
