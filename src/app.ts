@@ -1,34 +1,35 @@
-import { html, LitElement } from "lit";
+import {html, LitElement, render} from 'lit';
+import tailwindStyles from './stylesheet.css?inline';
 
-/*****************
- * Custom element
- * with shadow dom
- */
-export class App extends LitElement {
-  render() {
-    return html`
-      <div class="flex gap-3">
-        <div>one</div>
-        <div>two</div>
-        <div>three</div>
-      </div>
-    `;
-  }
-}
+///////////////////////////
+window.customElements.define(
+	'custom-element-without-tailwind',
+	class extends LitElement {
+		render = () => html`<p>Normal paragraph without tailwindcss.</p>`;
+	}
+);
 
-/**************
- * Stylesheet
- */
-import styles from "./stylesheet.css?inline";
-console.log(styles);
-const css = new CSSStyleSheet();
-css.replaceSync(styles);
-App.styles = css;
-// document.adoptedStyleSheets.push(css); // Uncomment to fix the issue
+///////////////////////////
+const stylesheet = new CSSStyleSheet();
+stylesheet.replaceSync(tailwindStyles);
 
-/*****************
- * Composing app
- */
-window.customElements.define("app-element", App);
-const app = new App();
-document.body.appendChild(app);
+window.customElements.define(
+	'custom-element-with-tailwind',
+	class extends LitElement {
+		static styles = stylesheet;
+		render() {
+			return html`
+				<p>Paragraph with tailwindcss, the base layer is breaking defaults.</p>
+			`;
+		}
+	}
+);
+
+///////////////////////////
+render(
+	html`
+		<custom-element-without-tailwind></custom-element-without-tailwind>
+		<custom-element-with-tailwind></custom-element-with-tailwind>
+	`,
+	document.body
+);
